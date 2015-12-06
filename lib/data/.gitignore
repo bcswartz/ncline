@@ -1,0 +1,6 @@
+# Keep this directory present but empty
+
+# Ignore everything in this directory
+*
+# But maintain the .gitignore file
+!.gitignore

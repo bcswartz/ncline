@@ -1,0 +1,9 @@
+# Ignore Node modules (installed via npm install)
+node_modules
+
+# Ignore any IntelliJ project files
+.idea
+*.iml
+out
+gen
+

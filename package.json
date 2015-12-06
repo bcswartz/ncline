@@ -1,0 +1,20 @@
+{
+  "name": "ncline",
+  "version": "0.0.1",
+  "description": "Node-powered command line interface platform for accessing directories and executing commands",
+  "main": "ncline.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "command"
+  ],
+  "author": "Brian C. Swartzfager",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "introspect": "0.0.3",
+    "lodash": "^3.10.1"
+  }
+}

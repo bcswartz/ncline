@@ -1,0 +1,6 @@
+# This directory is meant for demonstration commands
+
+# Ignore everything in this directory
+*
+# But maintain the .gitignore file
+!.gitignore
