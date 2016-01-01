@@ -116,8 +116,8 @@ module.exports = {
         } else if( action == 'update' && !replacementFilepath ) {
             output.throwError( "When using the 'update' action, you must provide 2 filepaths: the one being replaced and the replacement" );
         } else if( !data.aliases.hasOwnProperty( alias ) ) {
-            output.throwError( "Alias set'" + alias + "' not found; use createAliasSet to create." );
-        } else if( !data.aliases[ alias ] instanceof Array ) {
+            output.throwError( "Alias set '" + alias + "' not found; use createAliasSet to create." );
+        } else if( !( data.aliases[ alias ] instanceof Array ) ) {
             output.throwError( "Alias '" + alias + "' does not match an alias set." );
         }
 
@@ -167,11 +167,12 @@ module.exports = {
             output.throwError( "The alias parameter must be defined." );
         } else if ( !data.aliases.hasOwnProperty( alias ) ) {
             output.throwError( "Alias '" + alias + "' not found." );
-        } else if ( !data.aliases[ alias ] instanceof Array ) {
+        } else if ( !( data.aliases[ alias ] instanceof Array ) ) {
             output.throwError( "Alias '" + alias + "' does not match an alias set." );
         }
 
         delete data.aliases[ alias ];
+
         fs.writeFile( dataFile, JSON.stringify( data, null, 2 ), function( err ) {
             output.passError( err );
             if( !err && core.booleanValue( data.verbose )) {

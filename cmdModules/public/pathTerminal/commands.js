@@ -1,5 +1,5 @@
 //Load needed core Node modules
-var exec = require( 'child_process' ).exec;
+var childProcess = require( 'child_process' );
 var os = require( 'os' );
 
 //Load needed library modules
@@ -17,12 +17,12 @@ if( os.platform() == 'win32' ) {
             var paths = fp.getAlias( termAlias );
             if( paths instanceof Array ) {
                 paths.forEach( function( filepath ) {
-                    exec( core.createTerminalExecutionPrefix( filepath, termAlias ) + '"', function( err ) {
+                    childProcess.exec( core.createTerminalExecutionPrefix( filepath, termAlias ) + '"', function( err ) {
                         output.passError( err );
                     });
                 });
             } else {
-                exec( core.createTerminalExecutionPrefix( paths, termAlias ) + '"', function( err ) {
+                childProcess.exec( core.createTerminalExecutionPrefix( paths, termAlias ) + '"', function( err ) {
                     output.passError( err );
                 } );
             }

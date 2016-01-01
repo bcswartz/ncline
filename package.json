@@ -16,5 +16,11 @@
     "colors": "^1.1.2",
     "introspect": "0.0.3",
     "lodash": "^3.10.1"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "proxyquire": "^1.7.3",
+    "rewire": "^2.5.1",
+    "sinon": "^1.17.2"
   }
 }

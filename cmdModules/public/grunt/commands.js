@@ -1,6 +1,5 @@
 //Load needed core Node modules
-var exec = require( 'child_process' ).exec;
-var os = require( 'os' );
+var childProcess = require( 'child_process' );
 
 //Load needed library modules
 var output = require( '../../../lib/output' );
@@ -14,7 +13,9 @@ module.exports = {
     //Use for "grunt taskname" or "grunt taskname:parameters"
     grunt: function( alias, task ) {
         var filePath, taskName;
-        if( arguments.length > 2 ) {
+        if( arguments.length == 0 ) {
+            output.throwError( "This function requires at least one argument: task name or taskname:parameters" );
+        } else if( arguments.length > 2 ) {
             output.throwError( "This function takes only two arguments: a path alias and a task name or taskname:parameters" );
         }
         if( arguments.length == 1 ) {
@@ -27,7 +28,7 @@ module.exports = {
 
         var gruntPrefix = core.createTerminalExecutionPrefix( filePath, taskName );
 
-        exec( gruntPrefix + ' & grunt ' + taskName + '"', function ( err ) {
+        childProcess.exec( gruntPrefix + ' & grunt ' + taskName + '"', function ( err ) {
             output.passError( err );
         } );
 
@@ -37,11 +38,11 @@ module.exports = {
     gruntWithOptions: function( alias, task, optionsEnclosedInQuotes ) {
         var filePath, taskName, options;
 
-        if( arguments.length == 2 ) {
-            filePath = fp.getTargetPath();
-            taskName = task;
-            options = optionsEnclosedInQuotes;
+        if( arguments.length < 2 ) {
+            output.throwError( "This function requires at least two arguments: task name or taskname:parameters and option data for the task." );
+        }
 
+        if( arguments.length == 2 ) {
             filePath = fp.getTargetPath();
             taskName = arguments[ 0 ];
             options = arguments[ 1 ];
@@ -53,7 +54,7 @@ module.exports = {
 
         var gruntPrefix = core.createTerminalExecutionPrefix( filePath, taskName );
 
-        exec( gruntPrefix + ' & grunt ' + taskName + ' ' + options + '"', function ( err ) {
+        childProcess.exec( gruntPrefix + ' & grunt ' + taskName + ' ' + options + '"', function ( err ) {
             output.passError( err );
         } );
 

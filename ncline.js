@@ -106,7 +106,8 @@ rl.setPrompt( core.generateCommandPrompt( cmd ) );
  TODO: Find a better solution -
  Right now this is the best way I've found to workaround the behavior with the first prompt/line of input where it a) ignores the
  readline completer on Tab, and b) echos the first command
- */
+*/
+
 rl.question( 'ncline ready: hit Enter to start', function( answer ) {
     rl.prompt();
 });
@@ -174,5 +175,5 @@ rl.on( 'SIGINT', function() {
     rl.pause();
 })
 
-//Exports readline interface object for use in certain lib modules.
-module.exports.rl = rl;
+//Provides the core library with the rl object
+core.setReadlineInterface( rl );

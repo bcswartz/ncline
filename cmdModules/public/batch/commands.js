@@ -1,7 +1,7 @@
 //Load needed core Node modules
 var fs = require( 'fs' );
 var os = require( 'os' );
-var exec = require( 'child_process' ).exec;
+var childProcess = require( 'child_process' );
 
 //Load needed library files
 var output = require( '../../../lib/output' );
@@ -122,7 +122,7 @@ if( os.platform() == 'win32' ) {
                 output.throwError( "Batch file alias '" + alias + "' not found." );
             }
 
-            exec( parseBatchFileStatement( data.aliases[ alias ], alias ), function ( err ) {
+            childProcess.exec( parseBatchFileStatement( data.aliases[ alias ], alias ), function ( err ) {
                 output.passError( err );
             } );
         }
