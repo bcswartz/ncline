@@ -25,6 +25,7 @@ try {
 var moduleArray,
     stat,
     cmdModule,
+    cmdManual,
     cmdName,
     finalCmdName;
 
@@ -55,6 +56,7 @@ commandSets.forEach( function( setName ) {
         stat = fs.statSync( './cmdModules/' + setName + '/' + entry );
         if ( stat && stat.isDirectory() ) {
             cmdModule = require( './cmdModules/' + setName + '/' + entry + '/commands' );
+            cmdManual = fs.existsSync( './cmdModules/' + setName + '/' + entry + '/manual.json' ) ? require( './cmdModules/' + setName + '/' + entry + '/manual.json' ) : {};
             for ( cmdName in cmdModule ) {
                 //Set to user-defined command name override if one exists
                 finalCmdName = ( commandNameOverrides.hasOwnProperty( entry ) && commandNameOverrides[ entry ].hasOwnProperty( cmdName ) ) ? commandNameOverrides[ entry ][ cmdName ] : cmdName;
@@ -66,7 +68,9 @@ commandSets.forEach( function( setName ) {
                 cmd[ finalCmdName ] = {
                     object: cmdModule,
                     function: cmdModule[ cmdName ],
-                    signature: core.renderSignature( finalCmdName, cmdModule[ cmdName ] )
+                    signature: core.renderSignature( finalCmdName, cmdModule[ cmdName ] ),
+                    modulePath: setName + '/' + entry,
+                    manual: cmdManual.hasOwnProperty( cmdName ) ? cmdManual[ cmdName ] : null
                 };
                 cmdCatalog.push( finalCmdName );
 
@@ -108,7 +112,7 @@ rl.setPrompt( core.generateCommandPrompt( cmd ) );
  readline completer on Tab, and b) echos the first command
 */
 
-rl.question( 'ncline ready: hit Enter to start', function( answer ) {
+rl.question( 'ncline ready. Hit Enter to start. Type "about" and hit Enter for help.', function( answer ) {
     rl.prompt();
 });
 

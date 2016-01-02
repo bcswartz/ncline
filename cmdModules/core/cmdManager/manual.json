@@ -1,0 +1,19 @@
+{
+  "showCmds": {
+    "description": "Displays list of all available commands.",
+    "arguments": "None",
+    "example": "showCmds"
+  },
+  "man": {
+    "description": "Displays any documentation for the specified command",
+    "arguments": {
+      "cmdName": "Name of the command"
+    },
+    "example": "man showCmds"
+  },
+  "about": {
+    "description": "Displays brief instructions for using ncline",
+    "arguments": "None",
+    "example": "about"
+  }
+}

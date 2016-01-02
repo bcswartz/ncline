@@ -1,0 +1,50 @@
+{
+  "setBatchAliasVerbose": {
+    "description": "Set whether the batch commands should display a success message when they execute successfully.",
+    "arguments": {
+      "setting": "A value representing Boolean true or false ('true', 'false', 'yes', 'Y', 1)"
+    },
+    "example": "setBatchAliasVerbose true"
+  },
+  "createBatchAlias": {
+    "description": "Create a new alias for executing a batch file.",
+    "arguments": {
+      "alias": "The alias name",
+      "pathToBatchFile": "The absolute path to the batch file to execute (including the file name) with the 'batch' command."
+    },
+    "examples": [
+      "createBatchAlias myAlias C:\\batchFiles\\batchA.bat",
+      "createBatchAlias spacedAlias \"C:\\My Documents\\copyDocs.bat\""
+    ]
+  },
+  "updateBatchAlias": {
+    "description": "Changes the batch file file path for the specified alias.",
+    "arguments": {
+      "alias": "The alias name",
+      "pathToBatchFile": "The absolute path to the batch file to execute (including the file name) with the 'batch' command."
+    },
+    "examples": [
+      "updateBatchAlias myAlias C:\\batchFiles\\batchB.bat",
+      "updateBatchAlias spacedAlias \"D:\\My Documents\\copyDocs.bat\""
+    ]
+  },
+  "deleteBatchAlias": {
+    "description": "Deletes the specified batch file alias.",
+    "arguments": {
+      "alias": "The alias name"
+    },
+    "example": "deleteBatchAlias myAlias"
+  },
+  "showBatches": {
+    "description": "Displays a list of all of the batch file aliases",
+    "arguments": "None",
+    "example": "showBatches"
+  },
+  "batch": {
+    "description": "Executes the batch file assigned to the given alias name",
+    "arguments": {
+      "alias": "The alias name"
+    },
+    "example": "batch myBatchAlias"
+  }
+}

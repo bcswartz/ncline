@@ -1,0 +1,26 @@
+{
+  "grunt": {
+    "description": "Executes the specified Grunt task from the specified file path alias.  Can use with or without colon-separated task arguments.",
+    "arguments": {
+      "alias": "(Optional) The name of the file path alias.  Will use the current target file path if not provided.",
+      "task": "The name of the task plus any colon-separated task arguments"
+    },
+    "examples": [
+      "grunt taskFolder gruntTaskA",
+      "grunt taskFolder sumTask:13:24"
+    ],
+    "notes": "Allows you to run Grunt tasks within different different code projects from the ncline command line."
+  },
+  "gruntWithOptions": {
+    "description": "Executes the specified Grunt task with option flags from the specified file path alias. Can use with or without colon-separated task arguments.",
+    "arguments": {
+      "alias": "(Optional) The name of the file path alias.  Will use the current target file path if not provided.",
+      "task": "The name of the task plus any colon-separated task arguments",
+      "optionsEnclosedInQuotes": "Option flags for the task.  Must be enclosed in double-quotes."
+    },
+    "examples": [
+      "grunt taskFolder gruntTaskA \"--verbose=true --breakOnError=false\"",
+      "grunt taskFolder sumTask:13:24 \"--verbose=true --breakOnError=false\""
+    ]
+  }
+}

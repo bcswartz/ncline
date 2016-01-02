@@ -1,0 +1,35 @@
+{
+  "note": {
+    "description": "(Windows OS only) Creates and/or opens the specified .txt file in the alias file path in Notepad.",
+    "arguments": {
+      "filename": "The name of the file WITHOUT the .txt file extension",
+      "alias": "(Optional) The name of the file path alias.  Will use the current target file path if not provided."
+    },
+    "examples": [
+      "note myNewFile",
+      "note myNewFile docsAlias"
+    ],
+    "notes": "If a .txt file with the specified filename does not exist in the alias file path, it will be created.  Otherwise, the existing file will be opened in Notepad."
+  },
+  "notep": {
+    "description": "(Windows OS only) Creates and/or opens the specified .txt file in specified file path in Notepad.",
+    "arguments": {
+      "filePath": "The absolute file path where the file exists or should be created",
+      "filename": "The name of the file WITHOUT the .txt file extension"
+    },
+    "examples": [
+      "notep C:\\tmp myNewFile",
+      "notep \"C:\\My Documents\\notes\" myNewFile"
+    ],
+    "notes": [
+      "If you already have an alias defined for the file path where you want to create/load the file from, use the \"note\" command instead.",
+      "If a .txt file with the specified filename does not exist in the file path, it will be created.  Otherwise, the existing file will be opened in Notepad."
+    ]
+  },
+  "killpad": {
+    "description": "(Windows OS only) Attempts to shut down / close all open Notepad windows",
+    "arguments": "None",
+    "example": "killpad",
+    "notes": "Each Notepad window with a new/changed file will prompt you to save the file before it closes."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "window": {
+    "description": "Will open a file explorer window for the file path or paths associated with the specified alias / alias set",
+    "arguments": {
+      "alias": "(Optional) The name of the file path alias.  Will use the current target file path if not provided."
+    },
+    "examples": [
+      "window myDocs",
+      "window"
+    ]
+  }
+}

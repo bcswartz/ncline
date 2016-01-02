@@ -1,0 +1,135 @@
+{
+  "setPathVerbose": {
+    "description": "Set whether the file path commands should display a success message when they execute successfully.",
+    "arguments": {
+      "setting": "A value representing Boolean true or false ('true', 'false', 'yes', 'Y', 1)"
+    },
+    "example": "setPathVerbose true"
+  },
+  "createAlias": {
+    "description": "Create a new alias associated with a file path.",
+    "arguments": {
+      "alias": "The alias name",
+      "filepath": "The absolute file path"
+    },
+    "examples": [
+      "createAlias tmp C:\\tmp",
+      "createAlias docs \"C:\\My Documents\""
+    ]
+  },
+  "updateAlias": {
+    "description": "Changes the file path for the specified alias.",
+    "arguments": {
+      "alias": "The alias name",
+      "filepath": "The absolute file path"
+    },
+    "examples": [
+      "updateAlias tmp D:\\tmp",
+      "updateAlias docs \"D:\\My Documents\""
+    ]
+  },
+  "deleteAlias": {
+    "description": "Deletes the specified file path alias.",
+    "arguments": {
+      "alias": "The alias name"
+    },
+    "example": "deleteAlias myAlias"
+  },
+  "createAliasSet": {
+    "description": "Creates an alias representing a set of file paths and adds the specified file path to the new set",
+    "arguments": {
+      "alias": "The alias name",
+      "filepath": "The absolute file path"
+    },
+    "examples": [
+      "createAliasSet tmpFolders C:\\tmp",
+      "createAliasSet docs \"C:\\My Documents\""
+    ]
+  },
+  "updateAliasSet": {
+    "description": "Updates an alias set by adding, updating, or deleting a file path within the set",
+    "arguments": {
+      "alias": "The alias name",
+      "action": "The type of update.  Value must be either \"add\", \"update\", \"delete\"",
+      "filepath": "The absolute file path you want to add, update, or delete",
+      "replacementFilepath": "The absolute file path that will replace the specified file path. Used only when the action argument value is \"update\""
+    },
+    "examples": [
+      "updateAliasSet tmpFolders add D:\\tempFiles",
+      "updateAliasSet docs update \"C:\\My Documents\" \"D:\\docs\"",
+      "updateAliasSet tmpFolders delete C:\\temp"
+    ]
+  },
+  "deleteAliasSet": {
+    "description": "Deletes the entire specified alias set.",
+    "arguments": {
+      "alias": "The alias name"
+    },
+    "example": "deleteAliasSet tmpFolders"
+  },
+  "target": {
+    "description": "Either sets the specified alias as the target directory, or returns the target alias name and path",
+    "arguments": {
+      "alias": "The alias to make the target (cannot be an alias set)"
+    },
+    "examples": [
+      "target myAlias",
+      "target"
+    ],
+    "notes": [
+      "Commands that take a file path alias as an argument can be programmed to default to the target alias/path if no alias is specified.",
+      "The name of the target alias is displayed within the command prompt."
+    ]
+  },
+  "source": {
+    "description": "Either sets the specified alias as the source directory, or returns the source alias name and path",
+    "arguments": {
+      "alias": "The alias to make the source (cannot be an alias set)"
+    },
+    "examples": [
+      "source myAlias",
+      "source"
+    ],
+    "notes": [
+      "Commands can be programmed to use the source and target settings to conduct transactions between two directories.",
+      "If a source is set, it will show up in the command prompt."
+    ]
+  },
+  "clearSource": {
+    "description": "Empties the source setting",
+    "arguments": "None",
+    "example": "clearSource"
+  },
+  "showPaths": {
+    "description": "Displays a list of all of file path alias and alias sets",
+    "arguments": "None",
+    "example": "showPaths"
+  },
+  "getAlias": {
+    "description": "Returns the file path or paths for the specified alias. Meant to be used/called by other command functions.",
+    "arguments": {
+      "alias": "The alias name"
+    },
+    "example": "getAlias tmpFolders"
+  },
+  "getTargetAlias": {
+    "description": "Returns the target alias name. Meant to be used/called by other command functions.",
+    "arguments": "None",
+    "example": "getTargetAlias"
+  },
+  "getSourceAlias": {
+    "description": "Returns the source alias name. Meant to be used/called by other command functions.",
+    "arguments": "None",
+    "example": "getSourceAlias"
+  },
+  "getTargetPath": {
+    "description": "Returns the target file path. Meant to be used/called by other command functions.",
+    "arguments": "None",
+    "example": "getTargetPath"
+  },
+  "getSourcePath": {
+    "description": "Returns the source file path. Meant to be used/called by other command functions.",
+    "arguments": "None",
+    "example": "getSourcePath"
+  }
+}
