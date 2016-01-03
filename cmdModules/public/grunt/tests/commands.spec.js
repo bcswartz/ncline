@@ -33,7 +33,13 @@ describe( 'grunt commands', function() {
     beforeEach( function() {
         throwErrorStub = sinon.stub( output, "throwError", function( msg ) { throw new Error( msg ) } );
         targetPathStub = sinon.stub( fp, 'getTargetPath', function() { return 'C:\\targetPath' } );
-        getAliasStub = sinon.stub( fp, 'getAlias', function( aliasName ) { return 'C:\\' + aliasName } );
+        getAliasStub = sinon.stub( fp, 'getAlias', function( aliasName ) {
+            if( aliasName == 'aliasSet' ) {
+                return [ 'C:\\pathOne', 'C:\\pathTwo' ]
+            } else {
+                return 'C:\\' + aliasName
+            }
+        });
         passErrorStub = sinon.stub( output, 'passError' );
         prefixStub = sinon.stub( core, 'createTerminalExecutionPrefix', function( filepath, termAlias ) { return 'start "' + termAlias + '" cmd /k "' + filepath } );
         execStub = sinon.stub( childProcess, 'exec', function( statement, callback ) { callback(); } )
@@ -57,7 +63,12 @@ describe( 'grunt commands', function() {
             });
 
             it( 'will throw an error if more than two arguments are passed', function() {
-                expect( function() { commands.grunt( 'testAlias', 'testGruntTask', '"--filename:dark.txt"' ) } ).to.throw( Error, /his function takes only two arguments/ );
+                expect( function() { commands.grunt( 'testAlias', 'testGruntTask', '"--filename:dark.txt"' ) } ).to.throw( Error, /This function takes only two arguments/ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+                expect( prefixStub.callCount ).to.equal( 0 );
+            });
+            it( 'will throw an error if an alias set is used as the alias', function() {
+                expect( function() { commands.grunt( 'aliasSet', 'testGruntTask' ) } ).to.throw( Error, /The specified alias is an alias set./ );
                 expect( throwErrorStub.callCount ).to.equal( 1 );
                 expect( prefixStub.callCount ).to.equal( 0 );
             });
@@ -96,6 +107,12 @@ describe( 'grunt commands', function() {
 
                 expect( function() { commands.gruntWithOptions( 'gruntTaskName') } ).to.throw( Error, /This function requires at least two arguments/ );
                 expect( throwErrorStub.callCount ).to.equal( 2 );
+                expect( prefixStub.callCount ).to.equal( 0 );
+            });
+
+            it( 'will throw an error if an alias set is used as the alias', function() {
+                expect( function() { commands.gruntWithOptions( 'aliasSet', 'otherGruntTask', '--name:main.js' ) } ).to.throw( Error, /The specified alias is an alias set./ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
                 expect( prefixStub.callCount ).to.equal( 0 );
             });
 

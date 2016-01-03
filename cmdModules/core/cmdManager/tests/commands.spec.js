@@ -170,7 +170,7 @@ describe( 'cmdManager commands', function() {
 
         it( 'should execute console.log to provide instructions', function() {
             commands.about();
-            expect( logStub.args.length ).to.equal( 6 );
+            expect( logStub.args.length ).to.equal( 10 );
             expect( logStub.args[ 0 ][ 0 ] ).to.equal( '' );
         })
     });

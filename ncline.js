@@ -177,7 +177,7 @@ rl.on( 'line', function ( input ) {
 rl.on( 'SIGINT', function() {
     console.log( '\nExiting...'.yellow );
     rl.pause();
-})
+});
 
 //Provides the core library with the rl object
 core.setReadlineInterface( rl );

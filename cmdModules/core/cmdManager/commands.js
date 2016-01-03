@@ -62,11 +62,15 @@ module.exports = {
 
     about: function() {
         console.log('');
-        console.log( 'ncline is a platform for writing and executing Node-powered JavaScript functions ("commands") from a command line interface.\n'.yellow);
-        console.log( 'To execute a command, you simply type in the command name followed by any arguments, then hit Enter.\n'.yellow);
-        console.log( 'Hitting the Tab key at the command prompt will list the commands by name, and will also auto-suggest commands if you type a partial command name.\n'.yellow);
-        console.log( 'To view a list of commands that include their arguments, type the command "showCmds" and hit Enter.\n'.yellow);
-        console.log( 'To view manual documentation for a specific command, type "man" and then the command name, and hit Enter.\n'.yellow);
+        console.log( 'ncline is a platform for writing and executing Node-powered JavaScript functions ("commands") from a command line interface.\n'.yellow );
+        console.log( 'To execute a command, you simply type in the command name followed by any arguments, separated by spaces, then hit Enter.\n'.yellow );
+        console.log( 'If any argument value contains spaces, enclose the argument value in double-quotes.\n'.yellow );
+        console.log( 'Example: createAlias docs "C:\\My Documents"\n'.yellow );
+        console.log( 'You can also provide named arguments enclosed in square or curly brackets; useful if you want to skip a number of optional arguments.\n'.yellow);
+        console.log( 'Example: updateAliasSet [action:add alias:docs filePath:"D:\\My Documents"]\n'.yellow );
+        console.log( 'Hitting the Tab key at the command prompt will list the commands by name, and will also auto-suggest commands if you type a partial command name.\n'.yellow );
+        console.log( 'To view a list of commands that include their arguments, type the command "showCmds" and hit Enter.\n'.yellow );
+        console.log( 'To view manual documentation for a specific command, type "man" and then the command name, and hit Enter.\n'.yellow );
     }
 
 };

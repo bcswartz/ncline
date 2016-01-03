@@ -23,6 +23,10 @@ module.exports = {
             taskName = arguments[ 0 ];
         } else {
             filePath = fp.getAlias( arguments[ 0 ] );
+            //Make sure selected alias is not an alias set
+            if( filePath instanceof Array ) {
+                output.throwError( "The specified alias is an alias set." );
+            }
             taskName = arguments[ 1 ]
         }
 
@@ -48,6 +52,10 @@ module.exports = {
             options = arguments[ 1 ];
         } else {
             filePath = fp.getAlias( arguments[ 0 ] );
+            //Make sure selected alias is not an alias set
+            if( filePath instanceof Array ) {
+                output.throwError( "The specified alias is an alias set." );
+            }
             taskName = arguments[ 1 ];
             options = arguments[ 2 ];
         }
