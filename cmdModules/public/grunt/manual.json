@@ -9,7 +9,7 @@
       "grunt taskFolder gruntTaskA",
       "grunt taskFolder sumTask:13:24"
     ],
-    "notes": "Allows you to run Grunt tasks within different different code projects from the ncline command line."
+    "notes": "Allows you to run Grunt tasks within different different code projects from the ncline command line.  Assumes you have Grunt CLI installed globally and a Gruntfile in the file path."
   },
   "gruntWithOptions": {
     "description": "Executes the specified Grunt task with option flags from the specified file path alias. Can use with or without colon-separated task arguments.",
@@ -21,6 +21,7 @@
     "examples": [
       "grunt taskFolder gruntTaskA \"--verbose=true --breakOnError=false\"",
       "grunt taskFolder sumTask:13:24 \"--verbose=true --breakOnError=false\""
-    ]
+    ],
+    "notes": "Assumes you have Grunt CLI installed globally and a Gruntfile in the file path."
   }
 }

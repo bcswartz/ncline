@@ -12,20 +12,23 @@ var fp = require( '../../core/filePath/commands' );
 //TODO: remove Windows-only restriction
 if( os.platform() == 'win32' ) {
     module.exports = {
-        term: function( alias ) {
-            var termAlias = alias != null ? alias : fp.getTargetAlias()
-            var paths = fp.getAlias( termAlias );
-            if( paths instanceof Array ) {
-                paths.forEach( function( filepath ) {
-                    childProcess.exec( core.createTerminalExecutionPrefix( filepath, termAlias ) + '"', function( err ) {
-                        output.passError( err );
+        commands: {
+            term: function( alias ) {
+                var termAlias = alias != null ? alias : fp.hooks.getTargetAlias()
+                var paths = fp.hooks.getAlias( termAlias );
+                if( paths instanceof Array ) {
+                    paths.forEach( function( filepath ) {
+                        childProcess.exec( core.createTerminalExecutionPrefix( filepath, termAlias ) + '"', function( err ) {
+                            output.passError( err );
+                        });
                     });
-                });
-            } else {
-                childProcess.exec( core.createTerminalExecutionPrefix( paths, termAlias ) + '"', function( err ) {
-                    output.passError( err );
-                } );
+                } else {
+                    childProcess.exec( core.createTerminalExecutionPrefix( paths, termAlias ) + '"', function( err ) {
+                        output.passError( err );
+                    } );
+                }
             }
         }
+
     }
 }

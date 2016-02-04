@@ -7,6 +7,9 @@ describe( 'filePath commands', function() {
         output,
         core,
         init,
+        exports,
+        commands,
+        hooks,
         data = {};
 
     before( function() {
@@ -21,12 +24,16 @@ describe( 'filePath commands', function() {
             getConfig: function() { return 'dataFile.json' }
         };
 
-        commands = proxyquire( '../commands', {
+        exports = proxyquire( '../commands', {
             'fs': fs,
             '../../../lib/output': output,
             '../../../lib/core': core,
             './init': init
-        })
+        } );
+
+        commands = exports.commands;
+        hooks = exports.hooks;
+
     });
 
     //Manage global stubs
@@ -967,12 +974,22 @@ describe( 'filePath commands', function() {
                 expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Source path set to 'dDrive': D:\\" );
             } );
 
-            it( 'should execute output.msg if no alias is specified', function() {
+            it( 'should execute output.msg and return the current source if no alias is specified', function() {
                 commands.source();
 
                 expect( msgStub.callCount ).to.equal( 1 );
                 expect( msgStub.args[ 0 ][ 0 ] ).to.equal( "Current source alias:path is 'cDrive': C:\\" );
-            })
+            });
+
+            it( 'should execute output.msg and report no source if no source set and no alias is specified', function() {
+                data.source = {};
+                commands.source();
+
+                expect( msgStub.callCount ).to.equal( 1 );
+                expect( msgStub.args[ 0 ][ 0 ] ).to.equal( "Currently no source alias/path is defined." );
+            });
+
+
         });
     })
 
@@ -1081,24 +1098,24 @@ describe( 'filePath commands', function() {
 
         describe( 'under failure conditions', function() {
             it( 'should execute output.throwError, which throws an error, if no alias argument', function() {
-                expect( function() { commands.getAlias() } ).to.throw( Error, /The alias parameter must be defined./ );
+                expect( function() { hooks.getAlias() } ).to.throw( Error, /The alias parameter must be defined./ );
                 expect( throwErrorStub.callCount ).to.equal( 1 );
             });
 
             it( 'should execute output.throwError if alias not found', function() {
-                expect( function() { commands.getAlias( 'notThere' ) } ).to.throw( Error, /Alias 'notThere' not found./ );
+                expect( function() { hooks.getAlias( 'notThere' ) } ).to.throw( Error, /Alias 'notThere' not found./ );
                 expect( throwErrorStub.callCount ).to.equal( 1 );
             });
         });
 
         describe( 'under success conditions', function() {
             it( 'should return the alias path for a non-set alias', function() {
-                var aliasValue = commands.getAlias( 'cDrive' );
+                var aliasValue = hooks.getAlias( 'cDrive' );
                 expect( aliasValue ).to.equal( 'C:\\' );
             });
 
             it( 'should return the alias array for an alias set', function() {
-                var aliasValue = commands.getAlias( 'cSet' );
+                var aliasValue = hooks.getAlias( 'cSet' );
                 expect( aliasValue ).to.deep.equal( [ 'C:\\', 'C:\\User' ] );
             })
         });

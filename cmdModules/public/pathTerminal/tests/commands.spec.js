@@ -7,7 +7,8 @@ describe( 'pathTerminal commands', function() {
         os,
         output,
         core,
-        fp;
+        fp,
+        commands;
 
     before( function() {
         //Set stubs
@@ -23,7 +24,7 @@ describe( 'pathTerminal commands', function() {
             '../../../lib/output': output,
             '../../../lib/core': core,
             '../../core/filePath/commands': fp
-        });
+        } ).commands;
     });
 
     var osPlatformStub,
@@ -35,8 +36,8 @@ describe( 'pathTerminal commands', function() {
 
     beforeEach( function() {
         osPlatformStub = sinon.stub( os, 'platform', function() { return 'win32' } );
-        targetAliasStub = sinon.stub( fp, 'getTargetAlias', function() { return 'targetAlias' } );
-        getAliasStub = sinon.stub( fp, 'getAlias', function( aliasName ) {
+        targetAliasStub = sinon.stub( fp.hooks, 'getTargetAlias', function() { return 'targetAlias' } );
+        getAliasStub = sinon.stub( fp.hooks, 'getAlias', function( aliasName ) {
             switch( aliasName ) {
                 case 'targetAlias':
                     return 'C:\\targetPath';

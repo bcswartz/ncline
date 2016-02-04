@@ -4,9 +4,10 @@ var proxyquire = require( 'proxyquire' );
 
 describe( 'grunt commands', function() {
     var childProcess,
-       output,
-       core,
-       fp;
+        output,
+        core,
+        fp,
+        commands;
 
     before( function() {
         //Set stubs
@@ -20,7 +21,8 @@ describe( 'grunt commands', function() {
             '../../../lib/output': output,
             '../../../lib/core': core,
             '../../core/filePath/commands': fp
-        });
+        } ).commands;
+
     });
 
     var throwErrorStub,
@@ -32,8 +34,8 @@ describe( 'grunt commands', function() {
 
     beforeEach( function() {
         throwErrorStub = sinon.stub( output, "throwError", function( msg ) { throw new Error( msg ) } );
-        targetPathStub = sinon.stub( fp, 'getTargetPath', function() { return 'C:\\targetPath' } );
-        getAliasStub = sinon.stub( fp, 'getAlias', function( aliasName ) {
+        targetPathStub = sinon.stub( fp.hooks, 'getTargetPath', function() { return 'C:\\targetPath' } );
+        getAliasStub = sinon.stub( fp.hooks, 'getAlias', function( aliasName ) {
             if( aliasName == 'aliasSet' ) {
                 return [ 'C:\\pathOne', 'C:\\pathTwo' ]
             } else {

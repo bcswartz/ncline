@@ -13,6 +13,7 @@ describe( 'batch commands', function() {
         output,
         core,
         init,
+        commands,
         data = {};
 
     before( function() {
@@ -36,7 +37,7 @@ describe( 'batch commands', function() {
             '../../../lib/output': output,
             '../../../lib/core': core,
             './init': init
-        });
+        } ).commands;
 
     });
 

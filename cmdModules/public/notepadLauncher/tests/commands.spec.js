@@ -7,7 +7,8 @@ describe( 'pathWindow commands', function() {
         fs,
         os,
         output,
-        fp;
+        fp,
+        commands;
 
     before( function() {
         //Set stubs
@@ -23,7 +24,7 @@ describe( 'pathWindow commands', function() {
             'fs': fs,
             '../../../lib/output': output,
             '../../core/filePath/commands': fp
-        });
+        } ).commands;
     });
 
     var osPlatformStub,
@@ -36,8 +37,8 @@ describe( 'pathWindow commands', function() {
     beforeEach( function() {
         osPlatformStub = sinon.stub( os, 'platform', function() { return 'win32' } );
         throwErrorStub = sinon.stub( output, "throwError", function( msg ) { throw new Error( msg ) } );
-        targetPathStub = sinon.stub( fp, 'getTargetPath', function() { return 'E:\\targetPath' } );
-        getAliasStub = sinon.stub( fp, 'getAlias', function( aliasName ) {
+        targetPathStub = sinon.stub( fp.hooks, 'getTargetPath', function() { return 'E:\\targetPath' } );
+        getAliasStub = sinon.stub( fp.hooks, 'getAlias', function( aliasName ) {
             switch( aliasName ) {
                 case 'targetAlias':
                     return 'C:\\targetPath';
@@ -80,13 +81,13 @@ describe( 'pathWindow commands', function() {
         });
 
         describe( 'under success conditions', function() {
-            it( 'if no alias provided, executes fp.getTargetPath() but not fp.getAlias()', function() {
+            it( 'if no alias provided, executes fp.hooks.getTargetPath() but not fp.hooks.getAlias()', function() {
                 commands.note( 'test' );
                 expect( targetPathStub.callCount ).to.equal( 1 );
                 expect( getAliasStub.callCount ).to.equal( 0 );
             });
 
-            it( 'if alias provided, executes fp.getAlias() but not fp.getTargetPath()', function() {
+            it( 'if alias provided, executes fp.hooks.getAlias() but not fp.hooks.getTargetPath()', function() {
                 commands.note( 'test', 'singleAlias' );
                 expect( getAliasStub.callCount ).to.equal( 1 );
                 expect( targetPathStub.callCount ).to.equal( 0 );
@@ -127,7 +128,6 @@ describe( 'pathWindow commands', function() {
                         throw new Error( 'notThere');
                         break;
                     case 'C:\\notDirectory.txt':
-                        console.log( 'notDir' );
                         return {
                             isDirectory: function() { return false; }
                         };

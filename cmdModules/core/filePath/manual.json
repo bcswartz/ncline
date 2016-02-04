@@ -104,32 +104,5 @@
     "description": "Displays a list of all of file path alias and alias sets",
     "arguments": "None",
     "example": "showPaths"
-  },
-  "getAlias": {
-    "description": "Returns the file path or paths for the specified alias. Meant to be used/called by other command functions.",
-    "arguments": {
-      "alias": "The alias name"
-    },
-    "example": "getAlias tmpFolders"
-  },
-  "getTargetAlias": {
-    "description": "Returns the target alias name. Meant to be used/called by other command functions.",
-    "arguments": "None",
-    "example": "getTargetAlias"
-  },
-  "getSourceAlias": {
-    "description": "Returns the source alias name. Meant to be used/called by other command functions.",
-    "arguments": "None",
-    "example": "getSourceAlias"
-  },
-  "getTargetPath": {
-    "description": "Returns the target file path. Meant to be used/called by other command functions.",
-    "arguments": "None",
-    "example": "getTargetPath"
-  },
-  "getSourcePath": {
-    "description": "Returns the source file path. Meant to be used/called by other command functions.",
-    "arguments": "None",
-    "example": "getSourcePath"
   }
 }

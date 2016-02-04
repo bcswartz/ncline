@@ -55,7 +55,7 @@ commandSets.forEach( function( setName ) {
     moduleArray.forEach( function ( entry ) {
         stat = fs.statSync( './cmdModules/' + setName + '/' + entry );
         if ( stat && stat.isDirectory() ) {
-            cmdModule = require( './cmdModules/' + setName + '/' + entry + '/commands' );
+            cmdModule = require( './cmdModules/' + setName + '/' + entry + '/commands' ).commands;
             cmdManual = fs.existsSync( './cmdModules/' + setName + '/' + entry + '/manual.json' ) ? require( './cmdModules/' + setName + '/' + entry + '/manual.json' ) : {};
             for ( cmdName in cmdModule ) {
                 //Set to user-defined command name override if one exists
@@ -104,7 +104,7 @@ var rl = readline.createInterface( {
     completer: commandCompleter
 });
 
-rl.setPrompt( core.generateCommandPrompt( cmd ) );
+rl.setPrompt( core.generateCommandPrompt() );
 
 /*
  TODO: Find a better solution -
@@ -144,7 +144,7 @@ rl.on( 'line', function ( input ) {
                 }
 
                 cmd[ cmdName ].function.apply( cmd[ cmdName ].object, arguments );
-                rl.setPrompt( core.generateCommandPrompt( cmd ) );
+                rl.setPrompt( core.generateCommandPrompt() );
                 rl.prompt();
 
 
@@ -153,7 +153,7 @@ rl.on( 'line', function ( input ) {
                 arguments = [].slice.call(arguments, 1);
 
                 cmd[ cmdName ].function.apply( cmd[ cmdName ].object, arguments );
-                rl.setPrompt( core.generateCommandPrompt( cmd ) );
+                rl.setPrompt( core.generateCommandPrompt() );
                 rl.prompt();
             }
 

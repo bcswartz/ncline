@@ -6,6 +6,7 @@ var proxyquire = require( 'proxyquire' );
 describe( 'cmdManager commands', function() {
     var core,
         output,
+        commands,
         cmds;
 
     before( function() {
@@ -15,7 +16,7 @@ describe( 'cmdManager commands', function() {
         commands = proxyquire( '../commands', {
             '../../../lib/core': core,
             '../../../lib/output': output
-        });
+        } ).commands;
 
         cmds = {
             createAlias: {

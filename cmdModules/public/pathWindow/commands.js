@@ -11,19 +11,21 @@ var fp = require( '../../core/filePath/commands' );
 //TODO: remove Windows-only restriction
 if( os.platform() == 'win32' ) {
     module.exports = {
-        window: function ( alias ) {
-            var windowAlias = alias != null ? alias : fp.getTargetAlias()
-            var paths = fp.getAlias( windowAlias );
-            if ( paths instanceof Array ) {
-                paths.forEach( function ( filepath ) {
-                    childProcess.exec( 'start "" "' + filepath + '"', function ( err ) {
+        commands: {
+            window: function ( alias ) {
+                var windowAlias = alias != null ? alias : fp.hooks.getTargetAlias()
+                var paths = fp.hooks.getAlias( windowAlias );
+                if ( paths instanceof Array ) {
+                    paths.forEach( function ( filepath ) {
+                        childProcess.exec( 'start "" "' + filepath + '"', function ( err ) {
+                            output.passError( err );
+                        } );
+                    } );
+                } else {
+                    childProcess.exec( 'start "" "' + paths + '"', function ( err ) {
                         output.passError( err );
                     } );
-                } );
-            } else {
-                childProcess.exec( 'start "" "' + paths + '"', function ( err ) {
-                    output.passError( err );
-                } );
+                }
             }
         }
     }
