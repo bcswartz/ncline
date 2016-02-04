@@ -1,0 +1,129 @@
+{
+  "setWebAliasVerbose": {
+    "description": "Set whether the web commands should display a success message when they execute successfully.",
+    "arguments": {
+      "setting": "A value representing Boolean true or false ('true', 'false', 'yes', 'Y', 1)"
+    },
+    "example": "setWebAliasVerbose true"
+  },
+  "setDefaultBrowser": {
+    "description": "Sets the web browser to use when no browser is specified for the URL in the alias entry.",
+    "arguments": {
+      "browser": "The browser name as recognized by the OS (\"chrome\", \"iexplore\", \"firefox\", etc). Use the name \"default\" to specify the default browser recognized by the OS."
+    },
+    "examples": [
+      "setDefaultBrowser chrome",
+      "setDefaultBrowser default"
+    ]
+  },
+  "getDefaultBrowser": {
+    "description": "Returns the name of the current default browser as last set with the setDefaultBrowser command.",
+    "arguments": "None",
+    "example": "getDefaultBrowser"
+  },
+  "createWebAlias": {
+    "description": "Create a new alias for opening a URL in the specified browser",
+    "arguments": {
+      "alias": "The alias name",
+      "url": "The URL to open.  Must start with either \"www\" or \"http://\" or \"https://\".",
+      "browser": "(Optional) The name of the browser to use.  Will use the defaultBrowser setting of the web commands if not specified (see setDefaultBrowser)."
+    },
+    "examples": [
+      "createWebAlias goog http://google.com chrome",
+      "createWebAlias ms www.microsoft.com iexplore",
+      "createWebAlias node http://nodejs.org"
+    ]
+  },
+  "updateWebAlias": {
+    "description": "Changes the URL and/or the browser of the specified web alias",
+    "arguments": {
+      "alias": "The alias name",
+      "url": "The URL to open.  Must start with either \"www\" or \"http://\" or \"https://\".",
+      "browser": "(Optional) The name of the browser to use.  If not specified, will not change the current browser for the alias."
+    },
+    "examples": [
+      "updateWebAlias goog http://google.com firefox",
+      "updateWebAlias ms www.microsoft.com",
+      "updateWebAlias node http://nodejs.org"
+    ]
+  },
+  "deleteWebAlias": {
+    "description": "Deletes the specified web alias.",
+    "arguments": {
+      "alias": "The alias name"
+    },
+    "example": "deleteWebAlias google"
+  },
+
+  "updateWebAliasBrowser": {
+    "description": "Changes the the browser of the specified web alias",
+    "arguments": {
+      "alias": "The alias name",
+      "browser": "The name of the browser to use."
+    },
+    "examples": [
+      "updateWebAliasBrowser goog chrome",
+      "updateWebAliasBrowser ms iexplore"
+    ]
+  },
+
+  "createWebAliasSet": {
+    "description": "Create an alias representing a set of URL/browser pairs to open and adds the specified URL and browser as the first pair.",
+    "arguments": {
+      "alias": "The alias set name",
+      "url": "The URL to open.  Must start with either \"www\" or \"http://\" or \"https://\".",
+      "browser": "(Optional) The name of the browser to use.  Will use the defaultBrowser setting of the web commands if not specified (see setDefaultBrowser)."
+    },
+    "examples": [
+      "createWebAliasSet techgiants http://google.com chrome",
+      "createWebAliasSet humor http://xkcd.org"
+    ],
+    "notes": "Web alias sets let you open multiple web sites in a single browser, or view the same website in multiple browsers."
+  },
+  "updateWebAliasSet": {
+    "description": "Updates an alias set by adding a new alias, changing the URL or browser of an alias in the set, or deleting an alias from the set.",
+    "arguments": {
+      "alias": "The alias name",
+      "action": "The type of update. Value mused be either \"add\", \"url\", \"browser\", or \"delete\"",
+      "urlOrIndex": "Either URL of the alias you want to add/update/delete or the array index position of the alias.",
+      "newUrlOrBrowser": "If the action argument is \"add\", the name of the browser to use with the new alias. If the action argument is either \"url\" or \"browser\", the URL or browser that will replace the URL/browser of the alias specified."
+    },
+    "examples": [
+      "updateWebAliasSet techgiants add www.microsoft.com firefox",
+      "updateWebAliasSet techgiants url www.microsoft.com http://microsoft.com",
+      "updateWebAliasSet techgiants browser http://microsoft.com iexplore",
+      "updateWebAliasSet techgiants url 0 http://google.com",
+      "updateWebAliasSet techgiants delete 1"
+    ],
+    "notes": "Updating an alias in an alias set via the array index position (where 0 indicates the 1st alias, 1 the second, etc.) takes less typing.  You can use the showWebsites command to view your alias sets. If a URL appears multiples times in the set and you use the URL with either the \"url\" or \"browser\" action, you will end up updating the last alias with that URL in the set."
+  },
+  "deleteWebAliasSet": {
+    "description": "Deletes the specified web alias set.",
+    "arguments": {
+      "alias": "The alias name"
+    },
+    "example": "deleteWebAliasSet techgiants"
+  },
+  "showWebsites": {
+    "description": "Displays a list of all of the web aliases",
+    "arguments": "None",
+    "example": "showWebsites"
+  },
+  "getWebAlias": {
+    "description": "Returns the specified web alias / alias set.  Does not provide visible output. Meant to be used/called by other command functions.",
+    "arguments": {
+      "alias": "The alias name"
+    },
+    "example": "getWebAlias goog"
+  },
+  "web": {
+    "description": "Opens up the websites in the specified browser(s) as dictated by the specified web alias / web alias set.",
+    "arguments": {
+      "alias": "The alias name"
+    },
+    "examples": [
+      "web goog",
+      "web techWebsites"
+    ]
+  }
+}
