@@ -31,6 +31,7 @@ the current target filepath (opening and interacting with filepaths using aliase
 
 ## How to use ncline
 To execute a command, you simply type in the command name followed by any command arguments in the expected order, separated by spaces, then hit Enter.  
+
 If you don't want to provide a value for an optional argument, set the value to "null" (with or without double-quotes). If any argument value contains 
 spaces, enclose the argument value in double-quotes:
 
@@ -83,8 +84,7 @@ functionality or inadvertently sharing private information about their system.
 
 ### Writing a simple command by example
 
-1. Navigate to the folder where you installed ncline. In the _cmdModules/private_ directory, create a new directory called "math".  This is your command module
-folder.
+1. Navigate to the folder where you installed ncline. In the _cmdModules/private_ directory, create a new directory called "math".  This is your command module folder.  
 2. In the new "math" folder, create a file called "commands.js".  This is the file containing all commands for the "math" module.  
 3. In commands.js, add the following code:
 
