@@ -184,7 +184,7 @@ describe( 'browser commands', function() {
 
             it( 'should use the data.defaultBrowser value for the browser executable when the alias browser is set to "default"', function() {
                 var result = hooks.getBrowserExecutionString( aliasOne );
-                expect( result ).to.equal( 'open -a fakeBrowser www.one.com' );
+                expect( result ).to.equal( 'open -a "fakeBrowser" www.one.com' );
             });
 
             it( 'should not include the "-a" switch if data.defaultBrowser value is used and is ""', function() {
@@ -195,7 +195,7 @@ describe( 'browser commands', function() {
 
             it( 'should use the alias browser value in the execution string when not set to "default"', function() {
                 var result = hooks.getBrowserExecutionString( aliasTwo );
-                expect( result ).to.equal( 'open -a chrome www.two.com' );
+                expect( result ).to.equal( 'open -a "chrome" www.two.com' );
             });
         });
     });

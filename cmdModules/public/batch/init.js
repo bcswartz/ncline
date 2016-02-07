@@ -3,15 +3,16 @@ var fs = require( 'fs' );
 
 //Load needed library files
 var output = require( '../../../lib/output' );
+var core = require( '../../../lib/core' );
 
 //Persistent configuration or usage data should be stored in a subdirectory of cmdData with same name as cmdModule folder
-var dataDirectory = './cmdData/' + __dirname.split('\\')[ (__dirname.split('\\' ).length - 1) ];
+var dataDirectory = './cmdData/' + core.getModulePath( __dirname );
 
 var dataFile = dataDirectory + '/data.json';
 var data;
 
 var initialData = {
-    verbose: false,
+    verbose: true,
     aliases: {}
 };
 

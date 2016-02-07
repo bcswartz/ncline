@@ -189,7 +189,7 @@ describe( 'init functions', function() {
             expect( createDataFileStub.callCount ).to.equal( 1 );
 
             var dataResult = init.__get__( 'data' );
-            expect( dataResult.verbose ).to.equal( false );
+            expect( dataResult.verbose ).to.equal( true );
             expect( dataResult.aliases ).to.deep.equal( {} );
         });
     });

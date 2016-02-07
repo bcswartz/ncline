@@ -73,7 +73,7 @@ module.exports = {
             console.log( 'Hitting the Tab key at the command prompt will list the commands by name, and will also auto-suggest commands if you type a partial command name.\n'.yellow );
             console.log( 'To view a list of commands that include their arguments, type the command "showCmds" and hit Enter.\n'.yellow );
             console.log( 'To view manual documentation for a specific command, type "man" and then the command name, and hit Enter.\n'.yellow );
-            console.log( 'To exit ncline, hit Control/Command C. You may need to hit it twice if windows created by ncline are still open.\n'.yellow );
+            console.log( 'To exit ncline, hit Control-C. You may need to hit it twice if windows created by ncline are still open.\n'.yellow );
         }
     }
 };

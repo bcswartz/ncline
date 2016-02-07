@@ -312,7 +312,7 @@ module.exports = {
                     executionString = 'start ' + browserToExecute + ' ' + webAliasObject.url;
                     break;
                 case 'darwin':
-                    executionString = browserToExecute == '' ? 'open ' + webAliasObject.url : 'open -a ' + browserToExecute + ' ' + webAliasObject.url;
+                    executionString = browserToExecute == '' ? 'open ' + webAliasObject.url : 'open -a "' + browserToExecute + '" ' + webAliasObject.url;
                     break;
                 default:
                     executionString = 'start ' + browserToExecute + ' ' + webAliasObject.url;

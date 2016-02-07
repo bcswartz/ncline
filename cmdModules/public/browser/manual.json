@@ -25,7 +25,7 @@
     "description": "Create a new alias for opening a URL in the specified browser",
     "arguments": {
       "alias": "The alias name",
-      "url": "The URL to open.  Must start with either \"www\" or \"http://\" or \"https://\".",
+      "url": "The URL to open.  Must start with either \"http://\" or \"https://\" (on Windows, \"www\" will also work).",
       "browser": "(Optional) The name of the browser to use.  Will use the defaultBrowser setting of the web commands if not specified (see setDefaultBrowser)."
     },
     "examples": [
@@ -38,7 +38,7 @@
     "description": "Changes the URL and/or the browser of the specified web alias",
     "arguments": {
       "alias": "The alias name",
-      "url": "The URL to open.  Must start with either \"www\" or \"http://\" or \"https://\".",
+      "url": "The URL to open.  Must start with either \"http://\" or \"https://\" (on Windows, \"www\" will also work).",
       "browser": "(Optional) The name of the browser to use.  If not specified, will not change the current browser for the alias."
     },
     "examples": [
@@ -71,7 +71,7 @@
     "description": "Create an alias representing a set of URL/browser pairs to open and adds the specified URL and browser as the first pair.",
     "arguments": {
       "alias": "The alias set name",
-      "url": "The URL to open.  Must start with either \"www\" or \"http://\" or \"https://\".",
+      "url": "The URL to open.  Must start with either \"http://\" or \"https://\" (on Windows, \"www\" will also work).",
       "browser": "(Optional) The name of the browser to use.  Will use the defaultBrowser setting of the web commands if not specified (see setDefaultBrowser)."
     },
     "examples": [
