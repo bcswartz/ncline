@@ -85,7 +85,9 @@ functionality or inadvertently sharing private information about their system.
 ### Writing a simple command by example
 
 1. Navigate to the folder where you installed ncline. In the _cmdModules/private_ directory, create a new directory called "math".  This is your command module folder.  
+
 2. In the new "math" folder, create a file called "commands.js".  This is the file containing all commands for the "math" module.  
+
 3. In commands.js, add the following code:
 
         ```
