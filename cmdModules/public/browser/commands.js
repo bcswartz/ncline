@@ -110,6 +110,26 @@ module.exports = {
             } );
         },
 
+        renameWebAlias: function( currentAlias, newAlias ) {
+            if( currentAlias == null || newAlias == null ) {
+                output.throwError( "The current and new web alias names must be defined." );
+            } else if ( !data.aliases.hasOwnProperty( currentAlias ) ) {
+                output.throwError( "Alias '" + currentAlias + "' not found; use createWebAlias to create." );
+            } else if ( data.aliases[ currentAlias ] instanceof Array ) {
+                output.throwError( "Alias '" + currentAlias + "' belongs to a web alias set; use renameWebAliasSet to modify." );
+            }
+
+            data.aliases[ newAlias ] = data.aliases[ currentAlias ];
+            delete data.aliases[ currentAlias ];
+
+            fs.writeFile( dataFile, JSON.stringify( data, null, 2 ), function( err ) {
+                output.passError( err );
+                if( !err && core.booleanValue( data.verbose )) {
+                    output.success( "Web alias '" + currentAlias + "' renamed to '" + newAlias + "'." );
+                }
+            } );
+        },
+        
         deleteWebAlias: function ( alias ) {
             if ( alias == null ) {
                 output.throwError( "The web alias parameter must be defined." );
@@ -244,6 +264,26 @@ module.exports = {
             }
         },
 
+        renameWebAliasSet: function( currentAlias, newAlias ) {
+            if( currentAlias == null || newAlias == null ) {
+                output.throwError( "The current and new web alias names must be defined." );
+            } else if ( !data.aliases.hasOwnProperty( currentAlias ) ) {
+                output.throwError( "Alias '" + currentAlias + "' not found; use createWebAliasSet to create." );
+            } else if ( !( data.aliases[ currentAlias ] instanceof Array ) ) {
+                output.throwError( "Alias '" + currentAlias + "' does not match a web alias set; use renameWebAlias to modify." );
+            }
+
+            data.aliases[ newAlias ] = data.aliases[ currentAlias ];
+            delete data.aliases[ currentAlias ];
+
+            fs.writeFile( dataFile, JSON.stringify( data, null, 2 ), function( err ) {
+                output.passError( err );
+                if( !err && core.booleanValue( data.verbose )) {
+                    output.success( "Web alias set '" + currentAlias + "' renamed to '" + newAlias + "'." );
+                }
+            } );
+        },
+        
         deleteWebAliasSet: function ( alias ) {
             if ( alias == null ) {
                 output.throwError( "The alias parameter must be defined." );

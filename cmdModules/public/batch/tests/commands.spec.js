@@ -17,9 +17,9 @@ describe( 'batch commands', function() {
         data = {};
 
     before( function() {
-        //Set stubs
+        //Set stubs and mocks
         fs = sinon.stub();
-        os = sinon.stub();
+        os = { platform: function() { return 'win32' } };
         childProcess = sinon.stub();
         output = sinon.stub();
         core = sinon.stub();
@@ -42,14 +42,12 @@ describe( 'batch commands', function() {
     });
 
     //Manage global stubs
-    var osPlatformStub,
-        throwErrorStub,
+    var throwErrorStub,
         passErrorStub,
         successStub,
         booleanValueStub;
 
     beforeEach( function() {
-        osPlatformStub = sinon.stub( os, "platform", function() { return 'win32' } );
         throwErrorStub = sinon.stub( output, "throwError", function( msg ) { throw new Error( msg ) } );
         passErrorStub = sinon.stub( output, "passError", function() {} );
         successStub = sinon.stub( output, "success" );
@@ -57,7 +55,6 @@ describe( 'batch commands', function() {
     });
 
     afterEach( function() {
-        osPlatformStub.restore();
         throwErrorStub.restore();
         passErrorStub.restore();
         successStub.restore();
@@ -312,6 +309,87 @@ describe( 'batch commands', function() {
                 expect( data.aliases.aliasToChange ).to.equal( 'F:\\newPath\\newFile.bat' );
                 expect( successStub.callCount ).to.equal( 1 );
                 expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Batch file alias 'aliasToChange' updated to 'F:\\newPath\\newFile.bat'.")
+            } );
+        });
+    });
+
+    describe( 'renameBatchAlias', function() {
+
+        beforeEach( function() {
+            delete data.verbose;
+            data.aliases = { aliasToRename: 'C:\\renameBatch.bat' };
+        });
+
+        describe( 'under failure conditions', function() {
+            it( 'should execute output.throwError, which throws an error, if no currentAlias or newAlias argument', function() {
+                expect( function() { commands.renameBatchAlias() } ).to.throw( Error, /The current and new alias names must be defined./ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+
+                expect( function() { commands.renameBatchAlias( 'foo' ) } ).to.throw( Error, /The current and new alias names must be defined./ );
+                expect( throwErrorStub.callCount ).to.equal( 2 );
+                //Confirm alias not created
+                expect( data.aliases ).to.not.have.property( 'foo' );
+            });
+
+            it( 'should execute output.throwError with appropriate message if alias does not exist in data.aliases', function() {
+                expect( data.aliases ).to.not.have.property( 'notThere' );
+
+                expect( function() { commands.renameBatchAlias( 'notThere', 'D:\\notThere.bat' ) } ).to.throw( Error, /'notThere' not found/ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+            });
+
+        });
+
+        describe( 'under success conditions', function() {
+            it( 'should update the alias name in data.aliases and execute writeFile if legal function call', function () {
+                var jsonResult;
+
+                fs.writeFile = function ( dataFile, jsonString, callback ) {
+                    jsonResult = JSON.parse( jsonString );
+                };
+
+                commands.renameBatchAlias( 'aliasToRename', 'newAliasName' );
+
+                expect( data.aliases ).to.not.have.property( 'aliasToRename' );
+                expect( data.aliases ).to.have.property( 'newAliasName' );
+
+                expect( jsonResult.aliases ).to.not.have.property( 'aliasToRename' );
+                expect( jsonResult.aliases ).to.have.property( 'newAliasName' );
+
+                expect( data.aliases.newAliasName ).to.equal( 'C:\\renameBatch.bat' );
+                expect( jsonResult.aliases.newAliasName ).to.equal( 'C:\\renameBatch.bat' );
+            } );
+
+            it( 'should execute output.passError in its callback function', function () {
+                fs.writeFile = sinon.stub();
+                fs.writeFile.callsArgWith( 2, null );
+
+                commands.renameBatchAlias( 'aliasToRename', 'newAliasName' );
+
+                expect( passErrorStub.callCount ).to.equal( 1 );
+            } );
+
+            it( 'should execute output.success in its callback function if no error and data.verbose == true', function () {
+                fs.writeFile = sinon.stub();
+
+                booleanValueStub.returns( false );
+                fs.writeFile.callsArgWith( 2, null );
+                commands.renameBatchAlias( 'aliasToRename', 'newAliasName' );
+                expect( data.aliases ).to.have.property( 'newAliasName' );
+                expect( successStub.callCount ).to.equal( 0 );
+
+                booleanValueStub.returns( true );
+                fs.writeFile.callsArgWith( 2, new Error( 'failure' ) );
+                commands.renameBatchAlias( 'newAliasName', 'secondName' );
+                expect( data.aliases ).to.have.property( 'secondName' );
+                expect( successStub.callCount ).to.equal( 0 );
+
+                booleanValueStub.returns( true );
+                fs.writeFile.callsArgWith( 2, null );
+                commands.renameBatchAlias( 'secondName', 'thirdName' );
+                expect( data.aliases ).to.have.property( 'thirdName' );
+                expect( successStub.callCount ).to.equal( 1 );
+                expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Batch file alias 'secondName' renamed to 'thirdName'.");
             } );
         });
     });

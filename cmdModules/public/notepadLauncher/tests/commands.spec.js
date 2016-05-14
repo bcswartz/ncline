@@ -11,10 +11,10 @@ describe( 'pathWindow commands', function() {
         commands;
 
     before( function() {
-        //Set stubs
+        //Set stubs and mocks
         childProcess = sinon.stub();
         fs = sinon.stub();
-        os = sinon.stub();
+        os = { platform: function() { return 'win32' } };
         output = sinon.stub();
         fp = sinon.stub();
 
@@ -27,15 +27,13 @@ describe( 'pathWindow commands', function() {
         } ).commands;
     });
 
-    var osPlatformStub,
-        throwErrorStub,
+    var throwErrorStub,
         targetPathStub,
         getAliasStub,
         passErrorStub,
         execStub;
 
     beforeEach( function() {
-        osPlatformStub = sinon.stub( os, 'platform', function() { return 'win32' } );
         throwErrorStub = sinon.stub( output, "throwError", function( msg ) { throw new Error( msg ) } );
         targetPathStub = sinon.stub( fp.hooks, 'getTargetPath', function() { return 'E:\\targetPath' } );
         getAliasStub = sinon.stub( fp.hooks, 'getAlias', function( aliasName ) {
@@ -58,7 +56,6 @@ describe( 'pathWindow commands', function() {
     });
 
     afterEach( function() {
-        osPlatformStub.restore();
         throwErrorStub.restore();
         targetPathStub.restore();
         getAliasStub.restore();

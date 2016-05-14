@@ -29,6 +29,9 @@ to download and install the Node modules used by ncline.
 After that, type "node ncline.js" and hit Enter to run ncline. Hit Enter again when prompted, and you will see a command prompt denoting the alias name for 
 the current target filepath (opening and interacting with filepaths using aliases/nicknames is part of the base ncline functionality).
 
+(Note: if you plan on developing ncline command modules, or just want to run the included unit tests, you'll need to install a testing framework such as Mocha
+to execute the tests.)
+
 ## How to use ncline
 To execute a command, you simply type in the command name followed by any command arguments in the expected order, separated by spaces, then hit Enter.  
 
@@ -56,11 +59,11 @@ You have the option of customizing the command names if you don't like one or mo
 
 You can re-read many of these hints in ncline by typing the "about" command.
 
-### Current command library functionality (February 2016)
+### Current command library functionality (May 2016)
 
 Currently the ncline command library includes commands for:
 
-* Adding, changing, and deleting aliases for individual or multiple filepaths, and for setting the current target and source filepaths for filepath-related functions.
+* Adding, changing, renaming, and deleting aliases for individual or multiple filepaths, and for setting the current target and source filepaths for filepath-related functions.
 
 * Opening one or more file explorer windows based on the provided alias name.
 
@@ -70,11 +73,11 @@ Currently the ncline command library includes commands for:
 
 * Creating or opening a .txt file in Notepad based on the provided alias name (Windows only).
 
-* Adding, changing, and deleting aliases for Windows batch files (Windows only).
+* Adding, changing, renaming, and deleting aliases for Windows batch files (Windows only).
 
 * Executing the Windows batch file associated with the specified batch alias name (Windows only). 
 
-* Adding, changing, and deleting aliases for opening websites from ncline in the specified browser (useful for opening multiples sites in one browser or the same site in different browsers quickly).
+* Adding, changing, renaming, and deleting aliases for opening websites from ncline in the specified browser (useful for opening multiples sites in one browser or the same site in different browsers quickly).
 
 ## Creating new ncline commands
 
@@ -211,7 +214,6 @@ If you're interested in contributing to the improvement of ncline but aren't sur
 * When the Tab "autocomplete" action cannot find a command base on the currently-typed name, it displays a list of all commands in no particular order (per the commandCompleter function in 
 the ncline.js file.  Alphabetizing that list would be a nice improvement.
 * Creating a new function in output.js that could replace the use of "console.log" in some of the display commands.
-* The addition of a "renameAlias" command to the various alias command sets (filepath, batch, browser).
 * The creation of a Gulp task executor similar to the current Grunt task executor.
 * The creation of a set of commands to create/open TextEdit files on a Macintosh similar to the current Notepad set of commands.
 * The creation of a set of commands for aliasing and executing Macintosh shell scripts similar to the current Windows batch file set of commands.

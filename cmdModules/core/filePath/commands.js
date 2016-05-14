@@ -69,6 +69,26 @@ module.exports = {
             } );
         },
 
+        renameAlias: function( currentAlias, newAlias ) {
+            if( currentAlias == null || newAlias == null ) {
+                output.throwError( "The current and new alias names must be defined." );
+            } else if ( !data.aliases.hasOwnProperty( currentAlias ) ) {
+                output.throwError( "Alias '" + currentAlias + "' not found; use createAlias to create." );
+            } else if ( data.aliases[ currentAlias ] instanceof Array ) {
+                output.throwError( "Alias '" + currentAlias + "' belongs to an alias set; use renameAliasSet to modify." );
+            }
+
+            data.aliases[ newAlias ] = data.aliases[ currentAlias ];
+            delete data.aliases[ currentAlias ];
+
+            fs.writeFile( dataFile, JSON.stringify( data, null, 2 ), function( err ) {
+                output.passError( err );
+                if( !err && core.booleanValue( data.verbose )) {
+                    output.success( "Path alias '" + currentAlias + "' renamed to '" + newAlias + "'." );
+                }
+            } );
+        },
+
         deleteAlias: function( alias ) {
             if( alias == null ) {
                 output.throwError( "The alias parameter must be defined." );
@@ -162,6 +182,26 @@ module.exports = {
                     } );
                     break;
             }
+        },
+
+        renameAliasSet: function( currentAlias, newAlias ) {
+            if( currentAlias == null || newAlias == null ) {
+                output.throwError( "The current and new alias names must be defined." );
+            } else if ( !data.aliases.hasOwnProperty( currentAlias ) ) {
+                output.throwError( "Alias '" + currentAlias + "' not found; use createAliasSet to create." );
+            } else if ( !( data.aliases[ currentAlias ] instanceof Array ) ) {
+                output.throwError( "Alias '" + currentAlias + "' does not match an alias set; use renameAlias to modify." );
+            }
+
+            data.aliases[ newAlias ] = data.aliases[ currentAlias ];
+            delete data.aliases[ currentAlias ];
+
+            fs.writeFile( dataFile, JSON.stringify( data, null, 2 ), function( err ) {
+                output.passError( err );
+                if( !err && core.booleanValue( data.verbose )) {
+                    output.success( "Path alias set '" + currentAlias + "' renamed to '" + newAlias + "'." );
+                }
+            } );
         },
 
         deleteAliasSet: function( alias ) {

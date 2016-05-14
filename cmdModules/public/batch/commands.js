@@ -64,6 +64,26 @@ if( os.platform() == 'win32' ) {
                     }
                 } );
             },
+            
+            renameBatchAlias: function( currentAlias, newAlias ) {
+                if( currentAlias == null || newAlias == null ) {
+                    output.throwError( "The current and new alias names must be defined." );
+                } else if ( !data.aliases.hasOwnProperty( currentAlias ) ) {
+                    output.throwError( "Alias '" + currentAlias + "' not found; use createBatchAlias to create." );
+                }
+
+                data.aliases[ newAlias ] = data.aliases[ currentAlias ];
+                delete data.aliases[ currentAlias ];
+
+                fs.writeFile( dataFile, JSON.stringify( data, null, 2 ), function ( err ) {
+                    output.passError( err );
+                    if ( !err && core.booleanValue( data.verbose ) ) {
+                        output.success( "Batch file alias '" + currentAlias + "' renamed to '" + newAlias + "'." );
+                    }
+                } );
+                
+                
+            },
 
             updateBatchAlias: function ( alias, pathToBatchFile ) {
                 if ( alias == null || pathToBatchFile == null ) {

@@ -193,7 +193,7 @@ describe( 'filePath commands', function() {
                 commands.createAlias( 'goodAlias', 'C:\\' );
 
                 expect( passErrorStub.callCount ).to.equal( 1 );
-            } )
+            } );
 
             it( 'should execute output.success in its callback function if no error and data.verbose == true', function () {
                 fs.writeFile = sinon.stub();
@@ -215,7 +215,7 @@ describe( 'filePath commands', function() {
                 expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Path alias 'goodAlias3' set to 'C:\\'." );
             } )
         });
-    })
+    });
 
     describe( 'updateAlias', function() {
 
@@ -267,7 +267,7 @@ describe( 'filePath commands', function() {
                 expect( jsonResult.aliases ).to.have.property( 'aliasToChange' );
                 expect( data.aliases.aliasToChange ).to.equal( 'D:\\' );
                 expect( jsonResult.aliases.aliasToChange ).to.equal( 'D:\\' );
-            } )
+            } );
 
             it( 'should execute output.passError in its callback function', function () {
                 fs.writeFile = sinon.stub();
@@ -276,7 +276,7 @@ describe( 'filePath commands', function() {
                 commands.updateAlias( 'aliasToChange', 'D:\\' );
 
                 expect( passErrorStub.callCount ).to.equal( 1 );
-            } )
+            } );
 
             it( 'should execute output.success in its callback function if no error and data.verbose == true', function () {
                 fs.writeFile = sinon.stub();
@@ -301,7 +301,92 @@ describe( 'filePath commands', function() {
                 expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Path alias 'aliasToChange' updated to 'G:\\'." );
             } )
         });
-    })
+    });
+
+    describe( 'renameAlias', function() {
+        beforeEach( function() {
+            delete data.verbose;
+            data.aliases = {
+                aliasToRename: 'D:\\',
+                aliasSet: [
+                    'E:\\'
+                ]
+            }
+        });
+
+        describe( 'under failure conditions', function() {
+            it( 'should execute output.throwError, which throws an error, if no currentAlias or newAlias argument', function() {
+                expect( function() { commands.renameAlias() } ).to.throw( Error, /The current and new alias names must be defined./ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+
+                expect( function() { commands.renameAlias( 'foo' ) } ).to.throw( Error, /The current and new alias names must be defined./ );
+                expect( throwErrorStub.callCount ).to.equal( 2 );
+            });
+
+            it( 'should execute output.throwError with appropriate message if currentAlias does not exist in data.aliases', function() {
+                expect( data.aliases ).to.not.have.property( 'notThere' );
+
+                expect( function() { commands.renameAlias( 'notThere', 'newAliasName' ) } ).to.throw( Error, /'notThere' not found/ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+            });
+
+            it( 'should execute output.throwError with appropriate message if alias exists but is alias set', function() {
+                expect( function() { commands.renameAlias( 'aliasSet', 'newAliasName' ) } ).to.throw( Error, /'aliasSet' belongs to an alias set/ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+            });
+        });
+
+        describe( 'under success conditions', function() {
+            it( 'should update the alias name in data.aliases and execute writeFile if legal function call', function () {
+                var jsonResult;
+
+                fs.writeFile = function ( dataFile, jsonString, callback ) {
+                    jsonResult = JSON.parse( jsonString );
+                };
+
+                commands.renameAlias( 'aliasToRename', 'newAliasName' );
+
+                expect( data.aliases ).to.not.have.property( 'aliasToRename' );
+                expect( data.aliases ).to.have.property( 'newAliasName' );
+                expect( jsonResult.aliases ).to.not.have.property( 'aliasToRename' );
+                expect( jsonResult.aliases ).to.have.property( 'newAliasName' );
+                expect( data.aliases.newAliasName ).to.equal( 'D:\\' );
+                expect( jsonResult.aliases.newAliasName ).to.equal( 'D:\\' );
+            } );
+
+            it( 'should execute output.passError in its callback function', function () {
+                fs.writeFile = sinon.stub();
+                fs.writeFile.callsArgWith( 2, null );
+
+                commands.renameAlias( 'aliasToRename', 'newAliasName' );
+
+                expect( passErrorStub.callCount ).to.equal( 1 );
+            } );
+
+            it( 'should execute output.success in its callback function if no error and data.verbose == true', function () {
+                fs.writeFile = sinon.stub();
+
+                booleanValueStub.returns( false );
+                fs.writeFile.callsArgWith( 2, null );
+                commands.renameAlias( 'aliasToRename', 'newAliasName' );
+                expect( data.aliases ).to.have.property( 'newAliasName' );
+                expect( successStub.callCount ).to.equal( 0 );
+
+                booleanValueStub.returns( true );
+                fs.writeFile.callsArgWith( 2, new Error( 'failure' ) );
+                commands.renameAlias( 'newAliasName', 'secondName' );
+                expect( data.aliases ).to.have.property( 'secondName' );
+                expect( successStub.callCount ).to.equal( 0 );
+
+                booleanValueStub.returns( true );
+                fs.writeFile.callsArgWith( 2, null );
+                commands.renameAlias( 'secondName', 'thirdName' );
+                expect( data.aliases ).to.have.property( 'thirdName' );
+                expect( successStub.callCount ).to.equal( 1 );
+                expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Path alias 'secondName' renamed to 'thirdName'." );
+            } )
+        });
+    });
 
     describe( 'deleteAlias', function() {
 
@@ -390,7 +475,7 @@ describe( 'filePath commands', function() {
                 expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Path alias 'aliasToDelete' deleted." );
             } )
         });
-    })
+    });
 
     describe( 'createAliasSet', function() {
 
@@ -481,7 +566,7 @@ describe( 'filePath commands', function() {
                 expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Alias set 'goodAliasSet3' created with first path set to 'C:\\'." );
             } )
         });
-    })
+    });
 
     describe( 'updateAliasSet', function() {
 
@@ -726,7 +811,92 @@ describe( 'filePath commands', function() {
             })
 
         });
-    })
+    });
+
+    describe( 'renameAliasSet', function() {
+        beforeEach( function() {
+            delete data.verbose;
+            data.aliases = {
+                simpleAlias: 'E:\\',
+                aliasSetToRename: [
+                    'D:\\'
+                ]
+            }
+        });
+
+        describe( 'under failure conditions', function() {
+            it( 'should execute output.throwError, which throws an error, if no currentAlias or newAlias argument', function() {
+                expect( function() { commands.renameAliasSet() } ).to.throw( Error, /The current and new alias names must be defined./ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+
+                expect( function() { commands.renameAliasSet( 'foo' ) } ).to.throw( Error, /The current and new alias names must be defined./ );
+                expect( throwErrorStub.callCount ).to.equal( 2 );
+            });
+
+            it( 'should execute output.throwError with appropriate message if currentAlias does not exist in data.aliases', function() {
+                expect( data.aliases ).to.not.have.property( 'notThere' );
+
+                expect( function() { commands.renameAliasSet( 'notThere', 'newAliasName' ) } ).to.throw( Error, /'notThere' not found/ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+            });
+
+            it( 'should execute output.throwError with appropriate message if alias exists but is ', function() {
+                expect( function() { commands.renameAliasSet( 'simpleAlias', 'newAliasName' ) } ).to.throw( Error, /'simpleAlias' does not match an alias set/ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+            });
+        });
+
+        describe( 'under success conditions', function() {
+            it( 'should update the alias name in data.aliases and execute writeFile if legal function call', function () {
+                var jsonResult;
+
+                fs.writeFile = function ( dataFile, jsonString, callback ) {
+                    jsonResult = JSON.parse( jsonString );
+                };
+
+                commands.renameAliasSet( 'aliasSetToRename', 'newAliasName' );
+
+                expect( data.aliases ).to.not.have.property( 'aliasSetToRename' );
+                expect( data.aliases ).to.have.property( 'newAliasName' );
+                expect( jsonResult.aliases ).to.not.have.property( 'aliasSetToRename' );
+                expect( jsonResult.aliases ).to.have.property( 'newAliasName' );
+                expect( data.aliases.newAliasName[ 0 ] ).to.equal( 'D:\\' );
+                expect( jsonResult.aliases.newAliasName[ 0 ] ).to.equal( 'D:\\' );
+            } );
+
+            it( 'should execute output.passError in its callback function', function () {
+                fs.writeFile = sinon.stub();
+                fs.writeFile.callsArgWith( 2, null );
+
+                commands.renameAliasSet( 'aliasSetToRename', 'newAliasName' );
+
+                expect( passErrorStub.callCount ).to.equal( 1 );
+            } );
+
+            it( 'should execute output.success in its callback function if no error and data.verbose == true', function () {
+                fs.writeFile = sinon.stub();
+
+                booleanValueStub.returns( false );
+                fs.writeFile.callsArgWith( 2, null );
+                commands.renameAliasSet( 'aliasSetToRename', 'newAliasName' );
+                expect( data.aliases ).to.have.property( 'newAliasName' );
+                expect( successStub.callCount ).to.equal( 0 );
+
+                booleanValueStub.returns( true );
+                fs.writeFile.callsArgWith( 2, new Error( 'failure' ) );
+                commands.renameAliasSet( 'newAliasName', 'secondName' );
+                expect( data.aliases ).to.have.property( 'secondName' );
+                expect( successStub.callCount ).to.equal( 0 );
+
+                booleanValueStub.returns( true );
+                fs.writeFile.callsArgWith( 2, null );
+                commands.renameAliasSet( 'secondName', 'thirdName' );
+                expect( data.aliases ).to.have.property( 'thirdName' );
+                expect( successStub.callCount ).to.equal( 1 );
+                expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Path alias set 'secondName' renamed to 'thirdName'." );
+            } )
+        });
+    });
 
     describe( 'deleteAliasSet', function() {
 
@@ -813,7 +983,7 @@ describe( 'filePath commands', function() {
 
             } )
         });
-    })
+    });
 
     describe( 'target', function() {
         beforeEach( function() {

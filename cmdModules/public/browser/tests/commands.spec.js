@@ -520,6 +520,92 @@ describe( 'browser commands', function() {
         });
     });
 
+    describe( 'renameWebAlias', function() {
+
+        beforeEach( function() {
+            delete data.verbose;
+            data.aliases = {
+                aliasToRename: { url: 'http://google.com', browser: 'default' },
+                setAlias: [ { url: 'http://www.nodejs.org', browser: 'default' } ]
+            };
+        });
+
+        describe( 'under failure conditions', function() {
+            it( 'should execute output.throwError, which throws an error, if no alias or url argument', function() {
+                expect( function() { commands.renameWebAlias() } ).to.throw( Error, /The current and new web alias names must be defined./ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+
+                expect( function() { commands.renameWebAlias( 'foo' ) } ).to.throw( Error, /The current and new web alias names must be defined./ );
+                expect( throwErrorStub.callCount ).to.equal( 2 );
+                //Confirm alias not created
+                expect( data.aliases ).to.not.have.property( 'foo' );
+            });
+
+            it( 'should execute output.throwError with appropriate message if currentAlias does not exist in data.aliases', function() {
+                expect( data.aliases ).to.not.have.property( 'notThere' );
+
+                expect( function() { commands.renameWebAlias( 'notThere', 'newAliasName' ) } ).to.throw( Error, /'notThere' not found/ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+            });
+
+            it( 'should execute output.throwError with appropriate message if alias exists but is alias set', function() {
+                expect( function() { commands.renameWebAlias( 'setAlias', 'newAliasName' ) } ).to.throw( Error, /'setAlias' belongs to a web alias set/ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+            });
+        });
+
+        describe( 'under success conditions', function() {
+            it( 'should update the alias name in data.aliases and execute writeFile if legal function call', function () {
+                var jsonResult;
+
+                fs.writeFile = function ( dataFile, jsonString, callback ) {
+                    jsonResult = JSON.parse( jsonString );
+                };
+
+                commands.renameWebAlias( 'aliasToRename', 'newAliasName' );
+
+                expect( data.aliases ).to.not.have.property( 'aliasToRename' );
+                expect( data.aliases ).to.have.property( 'newAliasName' );
+                expect( jsonResult.aliases ).to.not.have.property( 'aliasToRename' );
+                expect( jsonResult.aliases ).to.have.property( 'newAliasName' );
+                expect( data.aliases.newAliasName.url ).to.equal( 'http://google.com' );
+                expect( jsonResult.aliases.newAliasName.url ).to.equal( 'http://google.com' );
+            } );
+
+            it( 'should execute output.passError in its callback function', function () {
+                fs.writeFile = sinon.stub();
+                fs.writeFile.callsArgWith( 2, null );
+
+                commands.renameWebAlias( 'aliasToRename', 'newAliasName' );
+
+                expect( passErrorStub.callCount ).to.equal( 1 );
+            } );
+
+            it( 'should execute output.success in its callback function if no error and data.verbose == true', function () {
+                fs.writeFile = sinon.stub();
+
+                booleanValueStub.returns( false );
+                fs.writeFile.callsArgWith( 2, null );
+                commands.renameWebAlias( 'aliasToRename', 'newAliasName' );
+                expect( data.aliases ).to.have.property( 'newAliasName' );
+                expect( successStub.callCount ).to.equal( 0 );
+
+                booleanValueStub.returns( true );
+                fs.writeFile.callsArgWith( 2, new Error( 'failure' ) );
+                commands.renameWebAlias( 'newAliasName', 'secondName' );
+                expect( data.aliases ).to.have.property( 'secondName' );
+                expect( successStub.callCount ).to.equal( 0 );
+
+                booleanValueStub.returns( true );
+                fs.writeFile.callsArgWith( 2, null );
+                commands.renameWebAlias( 'secondName', 'thirdName' );
+                expect( data.aliases ).to.have.property( 'thirdName' );
+                expect( successStub.callCount ).to.equal( 1 );
+                expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Web alias 'secondName' renamed to 'thirdName'." );
+            } );
+        });
+    });
+
     describe( 'deleteBatchAlias', function() {
 
         beforeEach( function() {
@@ -1240,6 +1326,92 @@ describe( 'browser commands', function() {
         });
     });
 
+    describe( 'renameWebAliasSet', function() {
+
+        beforeEach( function() {
+            delete data.verbose;
+            data.aliases = {
+                singleAlias: { url: 'http://google.com', browser: 'default' },
+                aliasToRename: [ { url: 'http://www.nodejs.org', browser: 'default' } ]
+            };
+        });
+
+        describe( 'under failure conditions', function() {
+            it( 'should execute output.throwError, which throws an error, if no alias or url argument', function() {
+                expect( function() { commands.renameWebAliasSet() } ).to.throw( Error, /The current and new web alias names must be defined./ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+
+                expect( function() { commands.renameWebAliasSet( 'foo' ) } ).to.throw( Error, /The current and new web alias names must be defined./ );
+                expect( throwErrorStub.callCount ).to.equal( 2 );
+                //Confirm alias not created
+                expect( data.aliases ).to.not.have.property( 'foo' );
+            });
+
+            it( 'should execute output.throwError with appropriate message if currentAlias does not exist in data.aliases', function() {
+                expect( data.aliases ).to.not.have.property( 'notThere' );
+
+                expect( function() { commands.renameWebAliasSet( 'notThere', 'newAliasName' ) } ).to.throw( Error, /'notThere' not found/ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+            });
+
+            it( 'should execute output.throwError with appropriate message if alias exists but is alias set', function() {
+                expect( function() { commands.renameWebAliasSet( 'singleAlias', 'newAliasName' ) } ).to.throw( Error, /'singleAlias' does not match a web alias set/ );
+                expect( throwErrorStub.callCount ).to.equal( 1 );
+            });
+        });
+
+        describe( 'under success conditions', function() {
+            it( 'should update the alias name in data.aliases and execute writeFile if legal function call', function () {
+                var jsonResult;
+
+                fs.writeFile = function ( dataFile, jsonString, callback ) {
+                    jsonResult = JSON.parse( jsonString );
+                };
+
+                commands.renameWebAliasSet( 'aliasToRename', 'newAliasName' );
+
+                expect( data.aliases ).to.not.have.property( 'aliasToRename' );
+                expect( data.aliases ).to.have.property( 'newAliasName' );
+                expect( jsonResult.aliases ).to.not.have.property( 'aliasToRename' );
+                expect( jsonResult.aliases ).to.have.property( 'newAliasName' );
+                expect( data.aliases.newAliasName[ 0 ].url ).to.equal( 'http://www.nodejs.org' );
+                expect( jsonResult.aliases.newAliasName[ 0 ].url ).to.equal( 'http://www.nodejs.org' );
+            } );
+
+            it( 'should execute output.passError in its callback function', function () {
+                fs.writeFile = sinon.stub();
+                fs.writeFile.callsArgWith( 2, null );
+
+                commands.renameWebAliasSet( 'aliasToRename', 'newAliasName' );
+
+                expect( passErrorStub.callCount ).to.equal( 1 );
+            } );
+
+            it( 'should execute output.success in its callback function if no error and data.verbose == true', function () {
+                fs.writeFile = sinon.stub();
+
+                booleanValueStub.returns( false );
+                fs.writeFile.callsArgWith( 2, null );
+                commands.renameWebAliasSet( 'aliasToRename', 'newAliasName' );
+                expect( data.aliases ).to.have.property( 'newAliasName' );
+                expect( successStub.callCount ).to.equal( 0 );
+
+                booleanValueStub.returns( true );
+                fs.writeFile.callsArgWith( 2, new Error( 'failure' ) );
+                commands.renameWebAliasSet( 'newAliasName', 'secondName' );
+                expect( data.aliases ).to.have.property( 'secondName' );
+                expect( successStub.callCount ).to.equal( 0 );
+
+                booleanValueStub.returns( true );
+                fs.writeFile.callsArgWith( 2, null );
+                commands.renameWebAliasSet( 'secondName', 'thirdName' );
+                expect( data.aliases ).to.have.property( 'thirdName' );
+                expect( successStub.callCount ).to.equal( 1 );
+                expect( successStub.args[ 0 ][ 0 ] ).to.equal( "Web alias set 'secondName' renamed to 'thirdName'." );
+            } );
+        });
+    });
+    
     describe( 'deleteWebAliasSet', function() {
 
         beforeEach( function() {
