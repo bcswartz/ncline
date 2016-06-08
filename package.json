@@ -1,6 +1,6 @@
 {
   "name": "ncline",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Node-powered command line interface platform for accessing directories and executing commands",
   "main": "ncline.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "dependencies": {
     "colors": "^1.1.2",
     "introspect": "0.0.3",
-    "lodash": "^3.10.1"
+    "lodash": "^4.12.0"
   },
   "devDependencies": {
     "chai": "^3.4.1",

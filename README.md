@@ -207,6 +207,13 @@ ncline users.
 other command module developers ("hooks"). The module.exports in _core/filePath/commands.js_ contains some examples.
 * Look at the existing commands and their unit tests for guidance and ideas.
 
+## Change Log
+
+#### 0.0.2 (June 2016)
+
+* Updated lodash version to 4.12.0.
+* Added watchers library to allow modules to register watchers that can then be close()'d before existing ncline.
+
 ## Opportunities to contribute
 
 If you're interested in contributing to the improvement of ncline but aren't sure where to start, here are a few ideas:

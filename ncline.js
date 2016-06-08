@@ -8,6 +8,7 @@ var colors = require( 'colors' );
 //Load needed library modules
 var core = require( './lib/core' );
 var output = require( './lib/output' );
+var watchers = require( './lib/watchers' );
 
 //Create or load file with command name overrides, if any exist
 var nameOverrideFile = './cmdData/nameOverrides.json';
@@ -175,6 +176,7 @@ rl.on( 'line', function ( input ) {
 });
 
 rl.on( 'SIGINT', function() {
+    watchers.closeAllWatchers();
     console.log( '\nExiting...'.yellow );
     rl.close();
 });
