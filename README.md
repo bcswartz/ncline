@@ -212,7 +212,7 @@ other command module developers ("hooks"). The module.exports in _core/filePath/
 #### 0.0.2 (June 2016)
 
 * Updated lodash version to 4.12.0.
-* Added watchers library to allow modules to register watchers that can then be close()'d before existing ncline.
+* Added watchers library to allow modules such as[ncline-screenshots](https://github.com/bcswartz/ncline-screenshots)to register watchers that can then be close()'d before existing ncline.
 
 ## Opportunities to contribute
 
